@@ -5,7 +5,7 @@ import Head from "next/head";
 export async function getServerSideProps() {
   let products;
   try {
-    const res = await fetch("http://localhost:3000/api/products");
+    const res = await fetch(`${process.env.NEXT_AUTH_URL}/api/products`);
     products = (await res.json());
   } catch (err) {
     console.log(err);

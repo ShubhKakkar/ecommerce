@@ -22,7 +22,6 @@ export async function getServerSideProps(context) {
 }
 
 const Login = ({ session }) => {
-  console.log(session);
   const router = useRouter();
   const emailRef = useRef();
   const passwordRef = useRef();

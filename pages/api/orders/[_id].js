@@ -11,7 +11,8 @@ export default async function handler(req, res) {
   if (!session.user.isAdmin) return;
   connectToDatabase();
   try {
-    const Order = await Orders.find({});
+    const { _id } = req.query;
+    const Order = await Orders.find({ _id });
     res.status(200).json(Order);
   } catch (err) {
     res.status(500).json({ error: err.message });

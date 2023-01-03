@@ -7,7 +7,7 @@ export async function getServerSideProps(context) {
   const { slug } = context.params;
   let product;
   try {
-    const res = await fetch(`http://localhost:3000/api/products/${slug}`);
+    const res = await fetch(`${process.env.NEXT_AUTH_URL}/api/products/${slug}`);
     product = (await res.json());
   } catch (err) {
     console.log(err);
