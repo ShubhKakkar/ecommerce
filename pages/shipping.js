@@ -1,7 +1,9 @@
-import React, { useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { getSession, useSession } from "next-auth/react";
 import CheckoutWizard from "../components/CheckoutWizard";
 import { toast } from "react-toastify";
+import { StoreContext } from "../contexts/store";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
@@ -22,6 +24,21 @@ export async function getServerSideProps(context) {
 
 const Shipping = ({ session }) => {
   const { data: data } = useSession();
+  const router = useRouter();
+  const [
+    cart,
+    addToCart,
+    updateQuantity,
+    removeFromCart,
+    clearCart,
+    shippingAddress,
+    saveShippingAddress,
+  ] = useContext(StoreContext);
+  useEffect(() => {
+    if(cart.length === 0) {
+      router.push('/products');
+    }
+  })
   const nameRef = useRef();
   const addressRef = useRef();
   const phoneRef = useRef();
@@ -63,6 +80,8 @@ const Shipping = ({ session }) => {
       toast.error("Enter country");
       return;
     }
+    saveShippingAddress(name, address, phone, city, postalCode, country);
+    router.push('/payment');
   };
   return (
     <div>
@@ -85,6 +104,7 @@ const Shipping = ({ session }) => {
             type="text"
             id="address"
             className="w-full"
+            defaultValue={shippingAddress && shippingAddress.address}
             ref={addressRef}
             required
           />
@@ -95,6 +115,7 @@ const Shipping = ({ session }) => {
             type="text"
             id="phone"
             className="w-full"
+            defaultValue={shippingAddress && shippingAddress.phone}
             ref={phoneRef}
             required
           />
@@ -105,6 +126,7 @@ const Shipping = ({ session }) => {
             type="text"
             id="city"
             className="w-full"
+            defaultValue={shippingAddress && shippingAddress.city}
             ref={cityRef}
             required
           />
@@ -115,6 +137,7 @@ const Shipping = ({ session }) => {
             type="text"
             id="postalCode"
             className="w-full"
+            defaultValue={shippingAddress && shippingAddress.postalCode}
             ref={postalCodeRef}
             required
           />
@@ -125,6 +148,7 @@ const Shipping = ({ session }) => {
             type="text"
             id="country"
             className="w-full"
+            defaultValue={shippingAddress && shippingAddress.country}
             ref={countryRef}
             required
           />

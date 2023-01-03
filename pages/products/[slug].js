@@ -1,15 +1,25 @@
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { useContext } from "react";
-import data from "../../utils/data";
 import { StoreContext } from "../../contexts/store";
 
-function SingleProduct() {
-  const { query } = useRouter();
-  const { slug } = query;
-  const product = data.products.find((x) => x.slug === slug);
+export async function getServerSideProps(context) {
+  const { slug } = context.params;
+  let product;
+  try {
+    const res = await fetch(`http://localhost:3000/api/products/${slug}`);
+    product = (await res.json());
+  } catch (err) {
+    console.log(err);
+  }
+  return {
+    props: {
+      product,
+    },
+  };
+}
+
+function SingleProduct({product}) {
   const [cart, addToCart, removeFromCart, clearCart] = useContext(StoreContext);
   const addCart = () => {
     const existItem = cart.find((item) => {
@@ -33,10 +43,10 @@ function SingleProduct() {
   return (
     <div>
       <Head>
-        <title>AyQ Beverages-{slug}</title>
+        <title>AyQ Beverages-{product.slug}</title>
         <meta
           name="description"
-          content={`AyQ Beverages website ${slug} page`}
+          content={`AyQ Beverages website ${product.slug} page`}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -50,7 +60,7 @@ function SingleProduct() {
             <img
               alt="ecommerce"
               className="lg:w-1/2 w-full h-[75vh] object-cover object-center rounded"
-              src={product.image}
+              src={product.images[0]}
             />
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
               <h2 className="text-sm title-font text-gray-500 tracking-widest">

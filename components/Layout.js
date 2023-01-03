@@ -37,20 +37,33 @@ const Layout = ({ children }) => {
                   </Menu.Button>
                   <Menu.Items className="absolute right-0 w-56 origin-top-right shadow-lg">
                     <Menu.Item>
-                      <DropdownLink className="dropdownLink" href="/user/profile">
+                      <DropdownLink
+                        className="dropdownLink"
+                        href="/user/profile"
+                      >
                         Profile
                       </DropdownLink>
                     </Menu.Item>
                     <Menu.Item>
-                      <DropdownLink className="dropdownLink" href="/user/history">
+                      <DropdownLink
+                        className="dropdownLink"
+                        href="/user/history"
+                      >
                         Order history
                       </DropdownLink>
                     </Menu.Item>
                     <Menu.Item>
-                      <button className="dropdownLink w-full" onClick={() => {
-                        signOut();
-                        clearCart();
-                      }}>Logout</button>
+                      <button
+                        className="dropdownLink w-full"
+                        onClick={() => {
+                          signOut();
+                          clearCart();
+                          localStorage.removeItem("shippingAddress");
+                          localStorage.removeItem("paymentMethod");
+                        }}
+                      >
+                        Logout
+                      </button>
                     </Menu.Item>
                   </Menu.Items>
                 </Menu>

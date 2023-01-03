@@ -5,7 +5,7 @@ const ProductItem = ({ product }) => {
   return (
     <Link href={`/products/${product.slug}`} className="block overflow-hidden group">
       <img
-        src={product.image}
+        src={product.images[0]}
         alt={product.name}
         className="md:h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 h-[50vh]"
       />
